@@ -130,12 +130,27 @@ int main(void)
         /* Execute the command */
         if (token_count > 0)
         {
+            /* Handle cd command */
+            if (strcmp(tokens[0], "cd") == 0)
+            {
+                if (token_count < 2)
+                {
+                    fprintf(stderr, "error: cd requires a directory argument\n");
+                }
+                else if (chdir(tokens[1]) != 0)
+                {
+                    fprintf(stderr, "error: cd failed\n");
+                }
+                continue;
+            }
+
             pid_t pid = fork();
             if (pid == 0) /* Child */
             {
-                execvp(tokens[0], tokens);
+                int ret = execvp(tokens[0], tokens);
                 /* execvp only returns if there is an error */
                 perror("error");
+                fprintf(stderr, "error: command exited with code%d\n", ret);
                 exit(EXIT_FAILURE);
             }
             else /* Parent */
