@@ -1,11 +1,22 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <signal.h>
 #include <unistd.h>
+#include <sys/wait.h>
+#include <sys/types.h>
 
 #define MAX_INPUT_LENGTH 1000
 #define MAX_TOKENS 100
 #define TOKEN_ERROR ((char *)-1)
+
+/* To handle: /bin/cat /dev/zero */
+void timeout_handler(int sig)
+{
+    (void)sig;
+    fprintf(stderr, "error: command timed out\n");
+    exit(124); /* Exit code 124 indicates a timeout */
+}
 
 char *custom_strtok(char *str, const char *delim, char **saveptr)
 {
@@ -165,6 +176,9 @@ int main(void)
             pid_t pid = fork();
             if (pid == 0) /* Child */
             {
+                signal(SIGALRM, timeout_handler);
+                alarm(5); /* 5 seconds */
+
                 execvp(tokens[0], tokens);
                 /* execvp only returns if there is an error */
                 perror("error");

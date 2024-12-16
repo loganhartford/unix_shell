@@ -1,3 +1,5 @@
+# Funcitonal Tests:
+
 /usr/bin/printf "The cat's name is %s.\n" 'Theodore Roosevelt'
 
 /usr/bin/printf "Missing quote
@@ -5,6 +7,34 @@
 cd /nonexistent
 
 head /nonexistent
+
+   /bin/echo   hello
+
+fakecommand
+
+/bin/echo  "test\0test"
+
+"      "
+
+/bin/echo $'\x01\x02\x03\x04'
+
+:(){ :|:& };:
+
+sh -c "sh -c 'sh -c sh'"
+
+/bin/echo $'\xFF\xFE\xFD'
+
+/bin/echo <&999
+
+(SIGQUIT)
+
+cd "fake_dir_that_is_super_long_with_1000_chars_$(head -c 1000 < /dev/zero)"
+
+# Failed
+/bin/cat /dev/zero
+
+
+# Test cases:
 
 cd /opt 
 ls
