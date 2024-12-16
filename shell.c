@@ -147,15 +147,19 @@ int main(void)
             pid_t pid = fork();
             if (pid == 0) /* Child */
             {
-                int ret = execvp(tokens[0], tokens);
+                execvp(tokens[0], tokens);
                 /* execvp only returns if there is an error */
                 perror("error");
-                fprintf(stderr, "error: command exited with code%d\n", ret);
-                exit(EXIT_FAILURE);
+                exit(1);
             }
             else /* Parent */
             {
-                wait(NULL);
+                int child_status;
+                waitpid(pid, &child_status, 0);
+                if (WIFEXITED(child_status) && WEXITSTATUS(child_status) != 0)
+                {
+                    fprintf(stderr, "error: command exited with code: %d\n", WEXITSTATUS(child_status));
+                }
             }
         }
     }
