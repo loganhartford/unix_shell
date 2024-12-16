@@ -39,14 +39,18 @@ char *custom_strtok(char *str, const char *delim, char **saveptr)
         /* Toggle in_quotes if we find a quote character */
         if (*str == '"' || *str == '\'')
         {
+            /* End of quoted section */
             if (in_quotes && *str == quote_char)
             {
                 in_quotes = 0;
+                *str = '\0'; /* Remove the closing quote */
             }
+            /* Start of quoted section */
             else if (!in_quotes)
             {
                 in_quotes = 1;
                 quote_char = *str;
+                token = str + 1; /* Start the token after the quote */
             }
         }
         /* If we are not in quotes and we find a delimiter, break */
@@ -55,6 +59,13 @@ char *custom_strtok(char *str, const char *delim, char **saveptr)
             break;
         }
         str++;
+    }
+
+    /* Detect mismatched quotes */
+    if (in_quotes)
+    {
+        fprintf(stderr, "error: mismatched quotes\n");
+        return NULL; // Return NULL to indicate an error
     }
 
     /* Terminate the token */
