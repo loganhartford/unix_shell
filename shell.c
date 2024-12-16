@@ -5,6 +5,7 @@
 
 #define MAX_INPUT_LENGTH 1000
 #define MAX_TOKENS 100
+#define TOKEN_ERROR ((char *)-1)
 
 char *custom_strtok(char *str, const char *delim, char **saveptr)
 {
@@ -65,7 +66,7 @@ char *custom_strtok(char *str, const char *delim, char **saveptr)
     if (in_quotes)
     {
         fprintf(stderr, "error: mismatched quotes\n");
-        return NULL; // Return NULL to indicate an error
+        return TOKEN_ERROR;
     }
 
     /* Terminate the token */
@@ -113,12 +114,18 @@ int main(void)
         int token_count = 0;
         char *saveptr;
         char *token = custom_strtok(input, " ", &saveptr);
-        while (token != NULL && token_count < MAX_TOKENS)
+        while (token != NULL && token != TOKEN_ERROR && token_count < MAX_TOKENS)
         {
             tokens[token_count++] = token;
             token = custom_strtok(NULL, " ", &saveptr);
         }
         tokens[token_count] = NULL;
+
+        /* If there was a mismatched quote error, skip execution */
+        if (token == TOKEN_ERROR)
+        {
+            continue;
+        }
 
         /* Execute the command */
         if (token_count > 0)
