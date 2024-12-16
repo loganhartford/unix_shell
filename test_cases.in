@@ -1,0 +1,29 @@
+/usr/bin/printf "The cat's name is %s.\n" 'Theodore Roosevelt'
+
+/usr/bin/printf "Missing quote
+
+cd /nonexistent
+
+head /nonexistent
+
+cd /opt 
+ls
+pwd
+
+/bin/ls -l
+
+/bin/echo extra   spaces     will   be    removed
+
+echo "but not if they're    in   quotes"
+
+mkdir '/tmp/"hello"'
+cd '/tmp/"hello"'
+pwd
+cd ..
+pwd
+
+false
+
+/bin/sh -c 'exit 7'
+
+

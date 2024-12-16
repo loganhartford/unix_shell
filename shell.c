@@ -96,6 +96,17 @@ int main(void)
             break;
         }
 
+        /* Check if the input length exceeds the buffer size */
+        if (input[strlen(input) - 1] != '\n' && !feof(stdin))
+        {
+            fprintf(stderr, "error: input too long\n");
+            /* Clear the input buffer */
+            int c;
+            while ((c = getchar()) != '\n' && c != EOF)
+                ;
+            continue;
+        }
+
         /* Properly terminate the input string */
         input[strcspn(input, "\n")] = '\0';
 
@@ -124,6 +135,13 @@ int main(void)
         /* If there was a mismatched quote error, skip execution */
         if (token == TOKEN_ERROR)
         {
+            continue;
+        }
+
+        /* If the number of tokens exceeds MAX_TOKENS, print an error and skip execution */
+        if (token_count >= MAX_TOKENS)
+        {
+            fprintf(stderr, "error: too many arguments\n");
             continue;
         }
 
