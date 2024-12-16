@@ -30,7 +30,6 @@ sh -c "sh -c 'sh -c sh'"
 
 cd "fake_dir_that_is_super_long_with_1000_chars_$(head -c 1000 < /dev/zero)"
 
-# Failed
 /bin/cat /dev/zero
 
 
